@@ -3,6 +3,7 @@ import axios from 'axios';
 import debounce from 'lodash/debounce';
 import Notiflix from 'notiflix';
 
+
 const formJS = document.querySelector(".search-form")
 const galleryJS = document.querySelector(".gallery")
 
@@ -10,7 +11,7 @@ formJS.addEventListener("submit", action)
 
 async function getPhotos(inquiry){
   try {
-    const response = await axios.get(`https://pixabay.com/api/?key=24765939-636e8942567168a69f12817e3&q=${inquiry}&image_type=photo`);
+    const response = await axios.get(`https://pixabay.com/api/?key=24765939-636e8942567168a69f12817e3&q=${inquiry}&image_type=photo&orientation=horizontal&safesearch=true`);
     console.log(response);
     return response.data
   } catch (error) {
@@ -30,52 +31,33 @@ async function action(event) {
   const resultServer = await getPhotos(inquiry)
   console.log(resultServer)
 
-  const result = resultServer.hits.map(photos  => photos.webformatURL)
-  console.log(result)
+  // const result = resultServer.hits.map(photos  => photos)
+  // console.log(result)
 
- const innerHTML = result.map(res => {
+  galleryJS.innerHTML = resultServer.hits.map(({webformatURL, likes, views, comments, downloads}) => {
      return `
       <div class="photo-card">
-        <img src=${res} alt="" loading="lazy" />
+        <img src=${webformatURL} alt="" loading="lazy" />
         <div class="info">
           <p class="info-item">
-            <b>Likes</b>
+            <b>Likes <span>${likes}</span></b>
           </p>
           <p class="info-item">
-            <b>Views</b>
+            <b>Views <span>${views}</span></b>
           </p>
           <p class="info-item">
-            <b>Comments</b>
+            <b>Comments <span>${comments}</span></b>
           </p>
           <p class="info-item">
-            <b>Downloads</b>
+            <b>Downloads <span>${downloads}</span></b>
           </p>
         </div>
       </div>
     `
   }).join(",")
-    console.log(innerHTML)
-  galleryJS.innerHTML = innerHTML
 
 
 
-  // galleryJS.innerHTML = " <div class=\"photo-card\">\n" +
-  //     "  <img src=`${result[key]}` alt=\"\" loading=\"lazy\" />\n" +
-  //     "  <div class=\"info\">\n" +
-  //     "    <p class=\"info-item\">\n" +
-  //     "      <b>Likes</b>\n" +
-  //     "    </p>\n" +
-  //     "    <p class=\"info-item\">\n" +
-  //     "      <b>Views</b>\n" +
-  //     "    </p>\n" +
-  //     "    <p class=\"info-item\">\n" +
-  //     "      <b>Comments</b>\n" +
-  //     "    </p>\n" +
-  //     "    <p class=\"info-item\">\n" +
-  //     "      <b>Downloads</b>\n" +
-  //     "    </p>\n" +
-  //     "  </div>\n" +
-  //     "</div> "
 
 }
 
