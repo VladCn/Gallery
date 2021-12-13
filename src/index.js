@@ -31,10 +31,16 @@ async function action(event) {
   const resultServer = await getPhotos(inquiry)
   console.log(resultServer)
 
-  // const result = resultServer.hits.map(photos  => photos)
-  // console.log(result)
-
+  if(!resultServer.total){
+    return Notiflix.Notify.failure("Sorry, there are no images matching your search query. Please try again.")
+  }
+  console.log(resultServer.total)
   galleryJS.innerHTML = resultServer.hits.map(({webformatURL, likes, views, comments, downloads}) => {
+    console.log(webformatURL)
+    // if(webformatURL === false){
+    //   return console.log("asasf")
+    // }
+    galleryJS.innerHTML = "";
      return `
       <div class="photo-card">
         <img src=${webformatURL} alt="" loading="lazy" />
