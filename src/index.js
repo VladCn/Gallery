@@ -54,7 +54,7 @@ async function action(event) {
         </div>
       </div>
     `
-  }).join(",")
+  }).join(" ")
 
 
 
