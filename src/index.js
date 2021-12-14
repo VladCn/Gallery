@@ -27,6 +27,7 @@ async function getPhotos(inquiry, page = 1){
 buttonAdd.addEventListener("click", addPage)
 async function addPage(event){
   event.preventDefault();
+
   page += 1;
  await action(event, page)
 }
@@ -45,8 +46,11 @@ async function action(event, page) {
   }
 
   const resultServer = await getPhotos(inq, page)
-  console.log(isNewInq)
+  console.log(inq)
 
+  if(inq){
+    buttonAdd.classList.add("on")
+  }
   if(!resultServer.total){
     return Notiflix.Notify.failure("Sorry, there are no images matching your search query. Please try again.")
   }

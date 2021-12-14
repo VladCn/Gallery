@@ -46,3 +46,11 @@ img{
   height: 85%;
 
 }
+
+.load-more{
+  display: none;
+}
+
+.on {
+  display: block;
+}
