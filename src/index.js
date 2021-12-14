@@ -33,7 +33,7 @@ async function addPage(event){
 }
 
 
-async function action(event, page) {
+async function action(event, currentPage = 1) {
   event.preventDefault();
   let isNewInq = true;
   const {
@@ -42,10 +42,11 @@ async function action(event, page) {
   if(!elements?.searchQuery){
     isNewInq = false;
   } else{
+    page = 1
     inq = elements.searchQuery.value;
   }
 
-  const resultServer = await getPhotos(inq, page)
+  const resultServer = await getPhotos(inq, currentPage)
   console.log(inq)
 
   if(inq){
@@ -54,9 +55,11 @@ async function action(event, page) {
   if(!resultServer.total){
     return Notiflix.Notify.failure("Sorry, there are no images matching your search query. Please try again.")
   }
-  console.log(resultServer.total)
+
 
   const photos = resultServer.hits.map(({webformatURL, likes, views, comments, downloads}) => {
+    // console.log(resultServer.totalHits)
+    console.log(resultServer.totalHits  / (40 * currentPage) )
 
   return `
       <div class="photo-card">
@@ -80,6 +83,9 @@ async function action(event, page) {
 }).join(" ")
   isNewInq ? (galleryJS.innerHTML = photos) : (galleryJS.insertAdjacentHTML("beforeend", photos))
 
+  if(resultServer.totalHits  / (40 * currentPage) <= 1){
+    buttonAdd.classList.remove("on")
+    return Notiflix.Notify.warning("We're sorry, but you've reached the end of search results.")
+  }
 }
-
 
