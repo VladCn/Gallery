@@ -3,6 +3,11 @@ import axios from 'axios';
 import debounce from 'lodash/debounce';
 import Notiflix from 'notiflix';
 
+import SimpleLightbox from "simplelightbox";
+// Дополнительный импорт стилей
+import 'simplelightbox/dist/simple-lightbox.min.css';
+// Change code below this line
+
 
 
 const formJS = document.querySelector(".search-form")
@@ -44,6 +49,7 @@ async function action(event, currentPage = 1) {
   } else{
     page = 1
     inq = elements.searchQuery.value;
+
   }
 
   const resultServer = await getPhotos(inq, currentPage)
@@ -57,13 +63,15 @@ async function action(event, currentPage = 1) {
   }
 
 
+
   const photos = resultServer.hits.map(({webformatURL, likes, views, comments, downloads}) => {
     // console.log(resultServer.totalHits)
     console.log(resultServer.totalHits  / (40 * currentPage) )
 
-  return `
-      <div class="photo-card">
+  return `<div class="photo-card ">
+         <a href="${webformatURL}">
         <img src=${webformatURL} alt="" loading="lazy" />
+        </a>
         <div class="info">
           <p class="info-item">
             <b>Likes <span>${likes}</span></b>
@@ -87,5 +95,16 @@ async function action(event, currentPage = 1) {
     buttonAdd.classList.remove("on")
     return Notiflix.Notify.warning("We're sorry, but you've reached the end of search results.")
   }
+
+  new SimpleLightbox('.gallery a', {captionsData: "alt", animationSpeed: "250"});
+
+  const { height: cardHeight } = document
+    .querySelector(".gallery")
+    .firstElementChild.getBoundingClientRect();
+
+  window.scrollBy({
+    top: cardHeight * 2,
+    behavior: "smooth",
+  });
 }
 
