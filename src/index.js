@@ -64,12 +64,12 @@ async function action(event, currentPage = 1) {
 
 
 
-  const photos = resultServer.hits.map(({webformatURL, likes, views, comments, downloads}) => {
+  const photos = resultServer.hits.map(({webformatURL, likes, views, comments, downloads, largeImageURL}) => {
     // console.log(resultServer.totalHits)
     console.log(resultServer.totalHits  / (40 * currentPage) )
 
   return `<div class="photo-card ">
-         <a href="${webformatURL}">
+         <a href="${largeImageURL}">
         <img src=${webformatURL} alt="" loading="lazy" />
         </a>
         <div class="info">
